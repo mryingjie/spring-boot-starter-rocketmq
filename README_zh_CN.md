@@ -88,6 +88,9 @@ public class ProducerApplication implements CommandLineRunner{
 ```properties
 ## application.properties
 spring.rocketmq.name-server=127.0.0.1:9876
+spring.rocketmq.topic=topic
+spring.rocketmq.consumerGroup=group01
+spring.rocketmq.consumeTime=2019-06-20 10:10:00
 ```
 
 > 注意:
