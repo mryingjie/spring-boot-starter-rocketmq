@@ -96,8 +96,8 @@ spring.rocketmq.consumeTime=2019-06-20 10:10:00
 > Note:
 > 
 > Maybe you need change `127.0.0.1:9876` with your real NameServer address for RocketMQ  
-> if you want consume message starting at specified time plase must set consumeTime for  @RocketMQMessageListener. if you  not set it  
-> consumer will consume message from the offset of the last consumption of this consumer group.
+> If you want consume message starting at specified time ,Plase must set consumeTime for  @RocketMQMessageListener. If you do not set it 
+> Consumer will consume message from the offset of the last consumption of this consumer group.
 
 ```java
 @SpringBootApplication
