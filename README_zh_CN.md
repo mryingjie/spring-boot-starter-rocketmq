@@ -92,7 +92,8 @@ spring.rocketmq.name-server=127.0.0.1:9876
 
 > 注意:
 > 
-> 请将上述示例配置中的`127.0.0.1:9876`替换成真实RocketMQ的NameServer地址与端口
+> 请将上述示例配置中的`127.0.0.1:9876`替换成真实RocketMQ的NameServer地址与端口  
+> 如果你想让消费者消费指定时间后生产的消息，请一定要给@RocketMQMessageListener配置consumeTime参数， 否则消费者将从本消费组最后消费过的消息出开始消>费
 
 ```java
 @SpringBootApplication
@@ -102,9 +103,9 @@ public class ConsumerApplication{
         SpringApplication.run(ConsumerApplication.class, args);
     }
     
-    @Slf4j
+   @Slf4j
     @Service
-    @RocketMQMessageListener(topic = "test-topic-1", consumerGroup = "my-consumer_test-topic-1")
+    @RocketMQMessageListener(topic = "${spring.rocketmq.topic}", consumerGroup = "${spring.rocketmq.consumerGroup}",consumeTime = "${spring.rocketmq.consumeTime}")
     public class MyConsumer1 implements RocketMQListener<String>{
         public void onMessage(String message) {
             log.info("received message: {}", message);
@@ -113,7 +114,7 @@ public class ConsumerApplication{
     
     @Slf4j
     @Service
-    @RocketMQMessageListener(topic = "test-topic-2", consumerGroup = "my-consumer_test-topic-2")
+    @RocketMQMessageListener(topic = "test-topic-2", consumerGroup = "my-consumer_test-topic-2" consumeTime = "2019-06-20 10:10:00")
     public class MyConsumer2 implements RocketMQListener<OrderPaidEvent>{
         public void onMessage(OrderPaidEvent orderPaidEvent) {
             log.info("received orderPaidEvent: {}", orderPaidEvent);
