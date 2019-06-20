@@ -28,7 +28,7 @@ Here are some key points listed, the complete example, please refer to: [rocketm
 <dependency>
     <groupId>org.apache.rocketmq</groupId>
     <artifactId>spring-boot-starter-rocketmq</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -88,11 +88,15 @@ public class ProducerApplication implements CommandLineRunner{
 ```properties
 ## application.properties
 spring.rocketmq.name-server=127.0.0.1:9876
+spring.rocketmq.topic=topic
+spring.rocketmq.consumerGroup=group01
+spring.rocketmq.consumeTime=2019-06-20 10:10:00
 ```
 
 > Note:
 > 
 > Maybe you need change `127.0.0.1:9876` with your real NameServer address for RocketMQ
+> if you want consume message starting at specified time plase must set consumeTime for  @RocketMQMessageListener. if you  not set ,it  > will be consumed from the offset of the last consumption of this consumer group.
 
 ```java
 @SpringBootApplication
@@ -104,7 +108,7 @@ public class ConsumerApplication{
     
     @Slf4j
     @Service
-    @RocketMQMessageListener(topic = "test-topic-1", consumerGroup = "my-consumer_test-topic-1")
+    @RocketMQMessageListener(topic = "${spring.rocketmq.topic}", consumerGroup = "${spring.rocketmq.consumerGroup}",consumeTime = "${spring.rocketmq.consumeTime}")
     public class MyConsumer1 implements RocketMQListener<String>{
         public void onMessage(String message) {
             log.info("received message: {}", message);
@@ -113,7 +117,7 @@ public class ConsumerApplication{
     
     @Slf4j
     @Service
-    @RocketMQMessageListener(topic = "test-topic-2", consumerGroup = "my-consumer_test-topic-2")
+    @RocketMQMessageListener(topic = "test-topic-2", consumerGroup = "my-consumer_test-topic-2" consumeTime = "2019-06-20 10:10:00")
     public class MyConsumer2 implements RocketMQListener<OrderPaidEvent>{
         public void onMessage(OrderPaidEvent orderPaidEvent) {
             log.info("received orderPaidEvent: {}", orderPaidEvent);
